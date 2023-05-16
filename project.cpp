@@ -211,9 +211,57 @@ outfile.close();
 }
 
 
+
+class User {
+private:
+    string username;
+    string password;
+
+public:
+    User(const string& username, const string& password)
+        : username(username), password(password) {}
+
+    string getUsername() const {
+        return username;
+    }
+
+    bool checkPassword(const string& passwordToCheck) const {
+        return password == passwordToCheck;
+    }
+};
+
+// Function to validate user credentials
+bool authenticateUser(const string& username, const string& password, const vector<User>& users) {
+    for (const User& user : users) {
+        if (user.getUsername() == username && user.checkPassword(password)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 int main() {
     // Read clothing items from a file
     vector<ClothingItem> clothingItems = readClothingItemsFromFile("clothing_items.txt");
+
+    // Create users
+    vector<User> users;
+    users.push_back(User("john", "password123"));
+    users.push_back(User("emma", "pass456"));
+
+    // Login prompt
+    string username, password;
+    cout << "Please login to proceed.\n";
+    cout << "Username: ";
+    cin >> username;
+    cout << "Password: ";
+    cin >> password;
+
+    // Authenticate the user
+    if (!authenticateUser(username, password, users)) {
+        cout << "Invalid credentials. Access denied.\n";
+        return 0;
+    }
 
     // Create an empty vector to store the selected clothing items
     vector<ClothingItem> selectedClothingItems;
