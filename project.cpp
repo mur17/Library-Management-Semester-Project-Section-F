@@ -211,21 +211,56 @@ outfile.close();
 }
 
 
-int main() 
-{
-// read clothing items from a file
-vector<ClothingItem> clothingItems = readClothingItemsFromFile("clothing_items.txt");
-// create an outfit and add some clothing items to it
-Outfit outfit(1, "Casual Friday", {}, "");
-outfit.addClothingItem(clothingItems[0]);
-outfit.addClothingItem(clothingItems[2]);
-outfit.addClothingItem(clothingItems[4]);
+int main() {
+    // Read clothing items from a file
+    vector<ClothingItem> clothingItems = readClothingItemsFromFile("clothing_items.txt");
 
-// print the outfit
-outfit.printOutfit();
+    // Create an empty vector to store the selected clothing items
+    vector<ClothingItem> selectedClothingItems;
 
-// write clothing items to a file
-writeClothingItemsToFile(clothingItems, "output.txt");
+    // Display the available clothing items
+    cout << "Available Clothing Items:\n";
+    for (const ClothingItem& item : clothingItems) {
+        item.printClothingItem();
+        cout << endl;
+    }
 
-return 0;
+    // Prompt the user to select clothing items for the outfit
+    int choice;
+    while (true) {
+        cout << "Enter the ID of the clothing item to add (or 0 to finish): ";
+        cin >> choice;
+
+        if (choice == 0) {
+            // User finished selecting clothing items
+            break;
+        } else {
+            // Find the selected clothing item by ID
+            bool found = false;
+            for (const ClothingItem& item : clothingItems) {
+                if (item.getId() == choice) {
+                    // Add the selected item to the vector
+                    selectedClothingItems.push_back(item);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                cout << "Invalid ID. Please try again.\n";
+            }
+        }
+    }
+
+    // Create the outfit with the selected clothing items
+    Outfit outfit(1, "Custom Outfit", selectedClothingItems, "");
+
+    // Print the created outfit
+    cout << "\nCreated Outfit:\n";
+    outfit.printOutfit();
+
+    // Write clothing items to a file
+    writeClothingItemsToFile(clothingItems, "output.txt");
+
+    return 0;
 }
