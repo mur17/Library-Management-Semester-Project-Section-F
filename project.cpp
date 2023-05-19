@@ -130,65 +130,69 @@ int main() {
         cin >> choice;
         cin.ignore(); // Ignore any remaining newline character
 
-        switch (choice) {
-            case 1: {
-                string name, size;
-                double price;
+        try {
+            switch (choice) {
+                case 1: {
+                    string name, size;
+                    double price;
 
-                cout << "Enter item name: ";
-                getline(cin, name);
+                    cout << "Enter item name: ";
+                    getline(cin, name);
 
-                cout << "Enter item size: ";
-                getline(cin, size);
+                    cout << "Enter item size: ";
+                    getline(cin, size);
 
-                cout << "Enter item price: ";
-                cin >> price;
+                    cout << "Enter item price: ";
+                    cin >> price;
 
-                myCloset.addItem(ClothingItem(name, size, price));
-                cout << "Item added to the closet." << endl;
-                break;
-            }
-            case 2:
-                myCloset.displayItems();
-                break;
-            case 3: {
-                string filename;
-                cout << "Enter filename to save: ";
-                getline(cin, filename);
-
-                myCloset.saveToFile(filename);
-                cout << "Closet items saved to file." << endl;
-                break;
-            }
-            case 4: {
-                string filename;
-                cout << "Enter filename to load: ";
-                getline(cin, filename);
-
-                myCloset.loadFromFile(filename);
-                cout << "Closet items loaded from file." << endl;
-                break;
-            }
-            case 5: {
-                int numItems;
-                cout << "Enter the number of items in the outfit: ";
-                cin >> numItems;
-
-                vector<ClothingItem> outfit = myCloset.getRandomOutfit(numItems);
-                cout << "Random Outfit:" << endl;
-
-                for (const auto& item : outfit) {
-                    item.display();
-                    cout << "--------------------" << endl;
+                    myCloset.addItem(ClothingItem(name, size, price));
+                    cout << "Item added to the closet." << endl;
+                    break;
                 }
+                case 2:
+                    myCloset.displayItems();
+                    break;
+                case 3: {
+                    string filename;
+                    cout << "Enter filename to save: ";
+                    getline(cin, filename);
 
-                break;
+                    myCloset.saveToFile(filename);
+                    cout << "Closet items saved to file." << endl;
+                    break;
+                }
+                case 4: {
+                    string filename;
+                    cout << "Enter filename to load: ";
+                    getline(cin, filename);
+
+                    myCloset.loadFromFile(filename);
+                    cout << "Closet items loaded from file." << endl;
+                    break;
+                }
+                case 5: {
+                    int numItems;
+                    cout << "Enter the number of items in the outfit: ";
+                    cin >> numItems;
+
+                    vector<ClothingItem> outfit = myCloset.getRandomOutfit(numItems);
+                    cout << "Random Outfit:" << endl;
+
+                    for (const auto& item : outfit) {
+                        item.display();
+                        cout << "--------------------" << endl;
+                    }
+
+                    break;
+                }
+                case 6:
+                    cout << "Exiting the program." << endl;
+                    break;
+                default:
+                    throw runtime_error("Invalid choice. Please try again.");
             }
-            case 6:
-                cout << "Exiting the program." << endl;
-                break;
-            default:
-                cout << "Invalid choice. Please try again." << endl;
+        } catch (const exception& e) {
+            cerr << "Error: " << e.what() << endl;
         }
 
         cout << endl;
