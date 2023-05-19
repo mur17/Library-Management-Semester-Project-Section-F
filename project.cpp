@@ -1,314 +1,198 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
-#include <fstream>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
-// ClothingItem class to represent a piece of clothing
 class ClothingItem {
 private:
-    int id;
-    string type;
-    string brand;
-    string color;
-    string size;
-    string style;
-    string image;
-
-public:
-    ClothingItem() {
-        id = 0;
-        type = "";
-        brand = "";
-        color = "";
-        size = "";
-        style = "";
-        image = "";
-    }
-
-    ClothingItem(int id, string type, string brand, string color, string size, string style, string image) {
-        this->id = id;
-        this->type = type;
-        this->brand = brand;
-        this->color = color;
-        this->size = size;
-        this->style = style;
-        this->image = image;
-    }
-
-    int getId() const {
-        return id;
-    }
-
-    void setId(int id) {
-        this->id = id;
-    }
-
-    string getType() const {
-        return type;
-    }
-
-    void setType(string type) {
-        this->type = type;
-    }
-
-    string getBrand() const {
-        return brand;
-    }
-
-    void setBrand(string brand) {
-        this->brand = brand;
-    }
-
-    string getColor() const {
-        return color;
-    }
-
-    void setColor(string color) {
-        this->color = color;
-    }
-
-    string getSize() const {
-        return size;
-    }
-
-    void setSize(string size) {
-        this->size = size;
-    }
-
-    string getStyle() const {
-        return style;
-    }
-
-    void setStyle(string style) {
-        this->style = style;
-    }
-
-    string getImage() const {
-        return image;
-    }
-
-    void setImage(string image) {
-        this->image = image;
-    }
-
-    void printClothingItem() const {
-        cout << "Clothing ID: " << id << endl;
-        cout << "Type: " << type << endl;
-        cout << "Brand: " << brand << endl;
-        cout << "Color: " << color << endl;
-        cout << "Size: " << size << endl;
-        cout << "Style: " << style << endl;
-        cout << "Image: " << image << endl;
-    }
-};
-
-// Outfit class to represent a collection of clothing items
-class Outfit {
-private:
-    int id;
     string name;
-    vector<ClothingItem> clothingItems;
-    string image;
+    string size;
+    double price;
 
 public:
-    Outfit() {
-        id = 0;
-        name = "";
-        image = "";
-    }
-
-    Outfit(int id, string name, vector<ClothingItem> clothingItems, string image) {
-        this->id = id;
-        this->name = name;
-        this->clothingItems = clothingItems;
-        this->image = image;
-    }
-
-    int getId() const {
-        return id;
-    }
-
-    void setId(int id) {
-        this->id = id;
-    }
+    ClothingItem(const string& itemName, const string& itemSize, double itemPrice)
+        : name(itemName), size(itemSize), price(itemPrice) {}
 
     string getName() const {
         return name;
     }
 
-    void setName(string name) {
-        this->name = name;
+    void setName(const string& newName) {
+        name = newName;
     }
 
-    vector<ClothingItem> getClothingItems() const {
-        return clothingItems;
+    void display() const {
+        cout << "Name: " << name << endl;
+        cout << "Size: " << size << endl;
+        cout << "Price: $" << price << endl;
     }
-
-    void setClothingItems(vector<ClothingItem> clothingItems) {
-        this->clothingItems = clothingItems;
-    }
-
-    string getImage() const {
-        return image;
-    }
-
-    void setImage(string image) {
-        this->image = image;
-    }
-
-    void addClothingItem(ClothingItem clothingItem) {
-        clothingItems.push_back(clothingItem);
-}
-void removeClothingItem(int index) {
-    clothingItems.erase(clothingItems.begin() + index);
-}
-
-void printOutfit() const {
-    cout << "Outfit ID: " << id << endl;
-    cout << "Name: " << name << endl;
-    cout << "Image: " << image << endl;
-    cout << "Clothing Items: " << endl;
-    for (const ClothingItem& item : clothingItems) {
-        item.printClothingItem();
-        cout << endl;
-    }
-}
 };
 
-// function to read clothing items from a file
-vector<ClothingItem> readClothingItemsFromFile(string filename) {
-vector<ClothingItem> clothingItems;
-ifstream infile(filename);
-if (infile.is_open()) {
-int id;
-string type;
-string brand;
-string color;
-string size;
-string style;
-string image;
-    while (infile >> id >> type >> brand >> color >> size >> style >> image) {
-        ClothingItem clothingItem(id, type, brand, color, size, style, image);
-        clothingItems.push_back(clothingItem);
-    }
-}
-infile.close();
-return clothingItems;
-}
-
-// function to write clothing items to a file
-void writeClothingItemsToFile(vector<ClothingItem> clothingItems, string filename) {
-ofstream outfile(filename);
-if (outfile.is_open()) {
-for (const ClothingItem& item : clothingItems) {
-outfile << item.getId() << " " << item.getType() << " " << item.getBrand() << " " << item.getColor()
-<< " " << item.getSize() << " " << item.getStyle() << " " << item.getImage() << endl;
-}
-}
-outfile.close();
-}
-
-
-
-class User {
+class Closet {
 private:
-    string username;
-    string password;
+    vector<ClothingItem> items;
 
 public:
-    User(const string& username, const string& password)
-        : username(username), password(password) {}
-
-    string getUsername() const {
-        return username;
+    void addItem(const ClothingItem& item) {
+        items.push_back(item);
     }
 
-    bool checkPassword(const string& passwordToCheck) const {
-        return password == passwordToCheck;
+    void displayItems() const {
+        for (const auto& item : items) {
+            item.display();
+            cout << "--------------------" << endl;
+        }
+    }
+
+    void saveToFile(const string& filename) const {
+        ofstream outFile(filename);
+
+        if (outFile.is_open()) {
+            for (const auto& item : items) {
+                outFile << item.getName() << "," << item.getSize() << "," << item.getPrice() << endl;
+            }
+
+            outFile.close();
+        } else {
+            cerr << "Error: Unable to open file for writing." << endl;
+        }
+    }
+
+    void loadFromFile(const string& filename) {
+        ifstream inFile(filename);
+
+        if (inFile.is_open()) {
+            items.clear();
+
+            string line;
+            while (getline(inFile, line)) {
+                // Parse the line and create a new ClothingItem
+                // Example line format: "Shirt,L,19.99"
+                // Extract name, size, and price from the line and create a ClothingItem object
+                // Add the ClothingItem object to the vector
+            }
+
+            inFile.close();
+        } else {
+            cerr << "Error: Unable to open file for reading." << endl;
+        }
+    }
+
+    vector<ClothingItem> getRandomOutfit(int numItems) const {
+        vector<ClothingItem> outfit;
+        const int itemCount = items.size();
+
+        if (numItems > itemCount) {
+            cout << "Error: Insufficient items in the closet." << endl;
+            return outfit;
+        }
+
+        srand(static_cast<unsigned int>(time(nullptr)));  // Seed the random number generator
+
+        for (int i = 0; i < numItems; ++i) {
+            int randomIndex = rand() % itemCount;
+            outfit.push_back(items[randomIndex]);
+        }
+
+        return outfit;
     }
 };
 
-// Function to validate user credentials
-bool authenticateUser(const string& username, const string& password, const vector<User>& users) {
-    for (const User& user : users) {
-        if (user.getUsername() == username && user.checkPassword(password)) {
-            return true;
-        }
-    }
-    return false;
+void displayMenu() {
+    cout << "------------------------" << endl;
+    cout << "1. Add item to closet" << endl;
+    cout << "2. Display closet items" << endl;
+    cout << "3. Save closet items to file" << endl;
+    cout << "4. Load closet items from file" << endl;
+    cout << "5. Generate random outfit" << endl;
+    cout << "6. Exit" << endl;
+    cout << "------------------------" << endl;
+    cout << "Enter your choice: ";
 }
 
 int main() {
-    // Read clothing items from a file
-    vector<ClothingItem> clothingItems = readClothingItemsFromFile("clothing_items.txt");
+    Closet myCloset;
 
-    // Create users
-    vector<User> users;
-    users.push_back(User("john", "password123"));
-    users.push_back(User("emma", "pass456"));
+    // Add some clothing items to the closet
+    myCloset.addItem(ClothingItem("Shirt", "L", 19.99));
+    myCloset.addItem(ClothingItem("Jeans", "M", 29.99));
+    myCloset.addItem(ClothingItem("Sweater", "S", 39.99));
+    // Add more clothing items here...
 
-    // Login prompt
-    string username, password;
-    cout << "Please login to proceed.\n";
-    cout << "Username: ";
-    cin >> username;
-    cout << "Password: ";
-    cin >> password;
+    int choice = 0;
 
-    // Authenticate the user
-    if (!authenticateUser(username, password, users)) {
-        cout << "Invalid credentials. Access denied.\n";
-        return 0;
-    }
+    while (choice != 6) {
+        displayMenu();
+        cin >> choice;
+        cin.ignore(); // Ignore any remaining newline character
 
-    // Create an empty vector to store the selected clothing items
-    vector<ClothingItem> selectedClothingItems;
+        switch (choice) {
+            case 1: {
+                string name, size;
+                double price;
 
-    // Display the available clothing items
-    cout << "Available Clothing Items:\n";
-    for (const ClothingItem& item : clothingItems) {
-        item.printClothingItem();
+                cout << "Enter item name: ";
+                getline(cin, name);
+
+                cout << "Enter item size: ";
+                getline(cin, size);
+
+                cout << "Enter item price: ";
+                cin >> price;
+
+                myCloset.addItem(ClothingItem(name, size, price));
+                cout << "Item added to the closet." << endl;
+                break;
+            }
+            case 2:
+                myCloset.displayItems();
+                break;
+            case 3: {
+                string filename;
+                cout << "Enter filename to save: ";
+                getline(cin, filename);
+
+                myCloset.saveToFile(filename);
+                cout << "Closet items saved to file." << endl;
+                break;
+            }
+            case 4: {
+                string filename;
+                cout << "Enter filename to load: ";
+                getline(cin, filename);
+
+                myCloset.loadFromFile(filename);
+                cout << "Closet items loaded from file." << endl;
+                break;
+            }
+            case 5: {
+                int numItems;
+                cout << "Enter the number of items in the outfit: ";
+                cin >> numItems;
+
+                vector<ClothingItem> outfit = myCloset.getRandomOutfit(numItems);
+                cout << "Random Outfit:" << endl;
+
+                for (const auto& item : outfit) {
+                    item.display();
+                    cout << "--------------------" << endl;
+                }
+
+                break;
+            }
+            case 6:
+                cout << "Exiting the program." << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+
         cout << endl;
     }
-
-    // Prompt the user to select clothing items for the outfit
-    int choice;
-    while (true) {
-        cout << "Enter the ID of the clothing item to add (or 0 to finish): ";
-        cin >> choice;
-
-        if (choice == 0) {
-            // User finished selecting clothing items
-            break;
-        } else {
-            // Find the selected clothing item by ID
-            bool found = false;
-            for (const ClothingItem& item : clothingItems) {
-                if (item.getId() == choice) {
-                    // Add the selected item to the vector
-                    selectedClothingItems.push_back(item);
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                cout << "Invalid ID. Please try again.\n";
-            }
-        }
-    }
-
-    // Create the outfit with the selected clothing items
-    Outfit outfit(1, "Custom Outfit", selectedClothingItems, "");
-
-    // Print the created outfit
-    cout << "\nCreated Outfit:\n";
-    outfit.printOutfit();
-
-    // Write clothing items to a file
-    writeClothingItemsToFile(clothingItems, "output.txt");
 
     return 0;
 }
