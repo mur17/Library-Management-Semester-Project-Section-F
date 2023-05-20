@@ -15,20 +15,25 @@ private:
 
 public:
     ClothingItem(const string& itemName, const string& itemSize, double itemPrice)
-        : name(itemName), size(itemSize), price(itemPrice) {}
 
-    string getName() const {
+: name(itemName), size(itemSize), price(itemPrice) {}
+
+string getName() const {
         return name;
     }
 
     void setName(const string& newName) {
-        name = newName;
+
+name = newName;
     }
 
     void display() const {
         cout << "Name: " << name << endl;
-        cout << "Size: " << size << endl;
-        cout << "Price: $" << price << endl;
+
+cout << "Size: " << size << endl;
+
+cout << "Price: $" << price << endl;
+
     }
 };
 
@@ -38,29 +43,37 @@ private:
 
 public:
     void addItem(const ClothingItem& item) {
-        items.push_back(item);
+
+items.push_back(item);
     }
 
     void displayItems() const {
         for (const auto& item : items) {
-            item.display();
+
+item.display();
             cout << "--------------------" << endl;
-        }
+
+       }
     }
 
     void saveToFile(const string& filename) const {
-        ofstream outFile(filename);
+
+ofstream outFile(filename);
 
         if (outFile.is_open()) {
             for (const auto& item : items) {
+
                 outFile << item.getName() << "," << item.getSize() << "," << item.getPrice() << endl;
-            }
+
+        }
 
             outFile.close();
         } else {
             cerr << "Error: Unable to open file for writing." << endl;
-        }
+
+      }
     }
+
 
     void loadFromFile(const string& filename) {
         ifstream inFile(filename);
